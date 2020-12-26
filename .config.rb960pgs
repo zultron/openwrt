@@ -2306,7 +2306,7 @@ CONFIG_PACKAGE_kmod-zram=m
 #
 CONFIG_PACKAGE_kmod-mmc-spi=m
 CONFIG_PACKAGE_kmod-spi-bitbang=m
-CONFIG_PACKAGE_kmod-spi-dev=m
+CONFIG_PACKAGE_kmod-spi-dev=y
 CONFIG_PACKAGE_kmod-spi-gpio=m
 CONFIG_PACKAGE_kmod-spi-gpio-custom=m
 CONFIG_PACKAGE_kmod-spi-vsc7385=m
@@ -6080,7 +6080,7 @@ CONFIG_PACKAGE_libjson-script=y
 # CONFIG_PACKAGE_mount-utils is not set
 # CONFIG_PACKAGE_mpack is not set
 # CONFIG_PACKAGE_mt-st is not set
-# CONFIG_PACKAGE_mtpoe_ctrl is not set
+CONFIG_PACKAGE_mtpoe_ctrl=y
 # CONFIG_PACKAGE_namei is not set
 CONFIG_PACKAGE_nand-utils=m
 # CONFIG_PACKAGE_netopeer2-cli is not set
