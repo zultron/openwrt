@@ -9,6 +9,7 @@
  *  - MikroTik RouterBOARD 941L-2nD
  *  - MikroTik RouterBOARD 951Ui-2nD
  *  - MikroTik RouterBOARD 952Ui-5ac2nD
+ *  - MikroTik RouterBOARD 960PGS
  *  - MikroTik RouterBOARD 962UiGS-5HacT2HnT
  *  - MikroTik RouterBOARD 750UP r2
  *  - MikroTik RouterBOARD 750P-PBr2
@@ -268,6 +269,9 @@ static struct gpio_led rb952_leds[] __initdata = {
 #define RB962_GPIO_LED_USER	12
 #define RB962_GPIO_USB_PWROFF	13
 #define RB962_GPIO_BTN_RESET	20
+
+/* RB 960PGS gpios:  as 962, but with ATTiny PoE */
+#define RB960_GPIO_ATTINY_RESET	14
 
 static struct gpio_led rb962_leds_gpio[] __initdata = {
 	{
@@ -970,13 +974,27 @@ static void __init rb750upr2_setup(void)
  * attached via PCI (QCA9880). Red and green WLAN LEDs are populated however
  * they are not attached to GPIOs, extra work is required to support these.
  * PoE and USB output power control is supported.
+ *
+ * The hEX PoE / RB960PGS (QCA9557) is very similar, except no on-board WLAN,
+ * and ATTiny PoE like the hEX PoE lite.
  */
 static void __init rb962_setup(void)
 {
-	u32 flags = RBSPI_HAS_USB | RBSPI_HAS_POE | RBSPI_HAS_PCI;
+	u32 flags = RBSPI_HAS_USB | RBSPI_HAS_PCI;
+
+
+	/* differentiate the hEX PoE from the hAP ac */
+	if (strstr(mips_get_machine_name(), "960PGS"))
+		flags |= RBSPI_HAS_ATTINY_POE;
+        else
+		flags |= RBSPI_HAS_POE;
 
 	if (!rbspi_platform_setup())
 		return;
+
+        /* FIXME Does this apply to the RB760? */
+	/* if (flags & RBSPI_HAS_ATTINY_POE) */
+	/* 	rbspi_spi_cs_gpios[2] = RB750R2_ATTINY_CS; */
 
 	rbspi_peripherals_setup(flags);
 
@@ -1011,6 +1029,11 @@ static void __init rb962_setup(void)
 				GPIOF_OUT_INIT_HIGH | GPIOF_ACTIVE_LOW |
 					GPIOF_EXPORT_DIR_FIXED,
 				"POE power");
+
+	if (flags & RBSPI_HAS_ATTINY_POE)
+                gpio_request_one(RB960_GPIO_ATTINY_RESET,
+                                 GPIOF_OUT_INIT_HIGH | GPIOF_EXPORT_DIR_FIXED,
+                                 "ATtiny POE reset");
 
 	ath79_register_leds_gpio(-1, ARRAY_SIZE(rb962_leds_gpio),
 				rb962_leds_gpio);
@@ -1272,6 +1295,7 @@ MIPS_MACHINE_NONAME(ATH79_MACH_RB_MAPL, "map-hb", rbmapl_setup);
 MIPS_MACHINE_NONAME(ATH79_MACH_RB_941, "H951L", rbhapl_setup);
 MIPS_MACHINE_NONAME(ATH79_MACH_RB_911L, "911L", rb911l_setup);
 MIPS_MACHINE_NONAME(ATH79_MACH_RB_952, "952-hb", rb952_setup);
+MIPS_MACHINE_NONAME(ATH79_MACH_RB_960, "960", rb962_setup);
 MIPS_MACHINE_NONAME(ATH79_MACH_RB_962, "962", rb962_setup);
 MIPS_MACHINE_NONAME(ATH79_MACH_RB_750UPR2, "750-hb", rb750upr2_setup);
 MIPS_MACHINE_NONAME(ATH79_MACH_RB_LHG5, "lhg", rblhg_setup);

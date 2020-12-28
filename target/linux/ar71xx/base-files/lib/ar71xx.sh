@@ -519,6 +519,9 @@ mikrotik_board_detect() {
 	*"952Ui-5ac2nD")
 		name="rb-952ui-5ac2nd"
 		;;
+    *"960PGS")
+        name="rb-960pgs"
+        ;;
 	*"962UiGS-5HacT2HnT")
 		name="rb-962uigs-5hact2hnt"
 		;;
