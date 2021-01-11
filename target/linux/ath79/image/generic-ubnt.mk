@@ -235,6 +235,13 @@ define Device/ubnt_unifiac-pro
 endef
 TARGET_DEVICES += ubnt_unifiac-pro
 
+define Device/ubnt_unifiac-iw
+  $(Device/ubnt_unifiac)
+  DEVICE_TITLE := Ubiquiti UniFi AC-IW
+  SUPPORTED_DEVICES += unifiac-pro
+endef
+TARGET_DEVICES += ubnt_unifiac-iw
+
 define Device/ubnt_routerstation_common
   DEVICE_PACKAGES := -kmod-ath9k -wpad-mini -uboot-envtools kmod-usb-ohci kmod-usb2 fconfig
   ATH_SOC := ar7161

@@ -171,7 +171,8 @@ case "$FIRMWARE" in
 	ubnt,nanobeam-ac|\
 	ubnt,nanostation-ac|\
 	ubnt,nanostation-ac-loco|\
-	ubnt,unifiac-pro)
+	ubnt,unifiac-pro|\
+	ubnt,unifiac-iw)
 		ath10kcal_extract "EEPROM" 20480 2116
 		;;
 	yuncore,a770)
